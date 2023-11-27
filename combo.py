@@ -80,8 +80,9 @@ def main():
     ip_file = "combo.txt"
     with open(ip_file, "r") as combo1:
         combo= combo1.readlines()
+    Worker= input("How many threads do you want ? ")
     with concurrent.futures.ThreadPoolExecutor(
-        max_workers=1) as executor:  #Adjust max_workers as needed
+        max_workers=int(Worker)) as executor:  #Adjust max_workers as needed
         executor.map(Login,combo)
 
 
